@@ -356,6 +356,20 @@ class socksocket(socket.socket):
 		self.__proxysockname = ("0.0.0.0", 0)
 		self.__proxypeername = (addr, destport)
 
+	def connect_ex(self, destpair):
+		"""
+		Connects like connect, but without exceptions
+		little fix for yowsup
+		:param destpair:
+		:return:
+		"""
+		# import pdb; pdb.set_trace()
+		try:
+			self.connect(destpair)
+			return 0
+		except:
+			return 110 #ETIMEDOUT errno
+
 	def connect(self, destpair):
 		"""connect(self, despair)
 		Connects to the specified destination through a proxy.
