@@ -39,9 +39,8 @@ class YowNetworkLayer(YowLayer, asyncore.dispatcher_with_send):
 	def onEvent(self, ev):
 		if ev.getName() == YowNetworkLayer.EVENT_STATE_CONNECT:
 			# self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
-			print('connect')
 			self.family_and_type = socket.AF_INET, socket.SOCK_STREAM
-			self.socksiproxy.setblocking(0)
+			# self.socksiproxy.setblocking(0)
 			self.set_socket(self.socksiproxy)
 			self.out_buffer = bytearray()
 			endpoint = self.getProp(self.__class__.PROP_ENDPOINT)
@@ -55,7 +54,6 @@ class YowNetworkLayer(YowLayer, asyncore.dispatcher_with_send):
 			self.handle_close(ev.getArg("reason") or "Requested")
 			return True
 		elif ev.getName() == YowNetworkLayer.EVENT_SET_PROXY:
-			print("set proxy")
 			proxy = ev.getArg("proxy")
 			if proxy is None:
 				self.socksiproxy = socksocket()
@@ -75,9 +73,6 @@ class YowNetworkLayer(YowLayer, asyncore.dispatcher_with_send):
 				except:
 					proxy_addr = proxy
 					proxy_port = None
-
-				print(proxy_addr)
-				print(proxy_port)
 
 				self.socksiproxy.setproxy(proxy_type, proxy_addr, int(proxy_port), username=proxy_login, password=proxy_password)
 				return True

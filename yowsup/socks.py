@@ -43,6 +43,7 @@ mainly to merge bug fixes found in Sourceforge
 import socket
 import struct
 import sys
+import re
 
 PROXY_TYPE_SOCKS4 = 1
 PROXY_TYPE_SOCKS5 = 2
@@ -367,8 +368,13 @@ class socksocket(socket.socket):
 		try:
 			self.connect(destpair)
 			return 0
-		except:
-			return 110 #ETIMEDOUT errno
+		except Exception as e:
+			errno = re.search(r"Errno\s*(\d+)", str(e))
+			if errno:
+				errno = int(errno.group(1))
+				return errno
+			else:
+				return 111
 
 	def connect(self, destpair):
 		"""connect(self, despair)
